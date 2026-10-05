@@ -1,0 +1,3 @@
+usage: zone_client.py [-h] [--scenario {normal,low,leak,critical}]
+                      [--zone {Hostel Blocks,Laboratories,Administration Building,Canteen}]
+zone_client.py: error: argument --zone: invalid choice: 'Administration' (choose from Hostel Blocks, Laboratories, Administration Building, Canteen)

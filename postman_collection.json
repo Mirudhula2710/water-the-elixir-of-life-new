@@ -1,0 +1,116 @@
+{
+  "info": {
+    "name": "Water Elixir API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get All Zones",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/zones",
+          "protocol": "http",
+          "host": [ "localhost" ],
+          "port": "8080",
+          "path": [ "api", "zones" ]
+        }
+      }
+    },
+    {
+      "name": "Get Alerts (Filtered)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/alerts?severity=CRITICAL",
+          "protocol": "http",
+          "host": [ "localhost" ],
+          "port": "8080",
+          "path": [ "api", "alerts" ],
+          "query": [ { "key": "severity", "value": "CRITICAL" } ]
+        }
+      }
+    },
+    {
+      "name": "Get Zone Readings",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/zones/1/readings?limit=10",
+          "protocol": "http",
+          "host": [ "localhost" ],
+          "port": "8080",
+          "path": [ "api", "zones", "1", "readings" ],
+          "query": [ { "key": "limit", "value": "10" } ]
+        }
+      }
+    },
+    {
+      "name": "Create Complaint",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json" } ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"zoneId\": 1,\n  \"description\": \"Water pooling in hallway\",\n  \"category\": \"Leak\",\n  \"priority\": \"HIGH\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/complaints",
+          "protocol": "http",
+          "host": [ "localhost" ],
+          "port": "8080",
+          "path": [ "api", "complaints" ]
+        }
+      }
+    },
+    {
+      "name": "Update Ticket (STAFF)",
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            { "key": "password", "value": "admin123", "type": "string" },
+            { "key": "username", "value": "admin", "type": "string" }
+          ]
+        },
+        "method": "PUT",
+        "header": [ { "key": "Content-Type", "value": "application/json" } ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": \"RESOLVED\",\n  \"notes\": \"Fixed the broken pipe\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/tickets/1",
+          "protocol": "http",
+          "host": [ "localhost" ],
+          "port": "8080",
+          "path": [ "api", "tickets", "1" ]
+        }
+      }
+    },
+    {
+      "name": "Auth Me (STAFF)",
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            { "key": "password", "value": "admin123", "type": "string" },
+            { "key": "username", "value": "admin", "type": "string" }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/auth/me",
+          "protocol": "http",
+          "host": [ "localhost" ],
+          "port": "8080",
+          "path": [ "api", "auth", "me" ]
+        }
+      }
+    }
+  ]
+}

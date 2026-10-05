@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Campus Water System{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            900: '#0c4a6e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col font-sans text-gray-800">
+    <!-- Navbar -->
+    <nav class="bg-brand-600 text-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <i class="fa-solid fa-droplet text-2xl mr-3"></i>
+                    <span class="font-bold text-xl tracking-tight">Elixir Water System</span>
+                </div>
+                <div class="flex items-center">
+                    {% if current_user.is_authenticated %}
+                        <span class="mr-4 text-brand-100 hidden sm:inline-block">Welcome, <span class="font-bold">{{ current_user.name }}</span> ({{ current_user.role|capitalize }})</span>
+                        <a href="{{ url_for('auth.logout') }}" class="bg-brand-500 hover:bg-brand-900 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors shadow-sm">Logout</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="mb-6 space-y-2">
+                {% for message in messages %}
+                    <div class="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded shadow-sm flex items-center" role="alert">
+                        <i class="fa-solid fa-circle-exclamation mr-3 text-red-500 text-lg"></i>
+                        <p>{{ message }}</p>
+                    </div>
+                {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-auto shadow-inner">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+            <p class="text-center text-sm text-gray-500">&copy; 2026 Campus Water System. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

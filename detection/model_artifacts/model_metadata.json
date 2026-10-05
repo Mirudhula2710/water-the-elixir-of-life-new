@@ -1,0 +1,40 @@
+{
+  "model_name": "SVM_RBF_Pipeline",
+  "features": [
+    "hour",
+    "minute_of_day",
+    "tank_level",
+    "expected_level",
+    "rate_of_change",
+    "zone_Administration Building",
+    "zone_Canteen",
+    "zone_Hostel Blocks",
+    "zone_Laboratories"
+  ],
+  "base_features": [
+    "hour",
+    "minute_of_day",
+    "tank_level",
+    "expected_level",
+    "rate_of_change",
+    "zone"
+  ],
+  "classes": [
+    "Critical",
+    "Normal",
+    "Suspected Leak",
+    "Warning"
+  ],
+  "training_date": "2026-10-04T16:25:58.149838Z",
+  "dataset_size": 4000,
+  "dataset_hash": "1cc81e58cd294bf3e153f673405936cd9262f547c591ba2eb1ac568e3a0458ee",
+  "split": "80/20 Stratified (random_state=42)",
+  "metrics": {
+    "test_accuracy": 0.985,
+    "test_macro_f1": 0.9356099282661783,
+    "cv_macro_f1_mean": 0.785468157547564,
+    "cv_macro_f1_std": 0.16386355900512867
+  },
+  "sklearn_version": "1.9.1",
+  "note": "Trained on purely SYNTHETIC data. The dataset exhibits leakage where severity is a direct rule on deviation_pct, so the model largely learns a threshold rule on simulated data."
+}
