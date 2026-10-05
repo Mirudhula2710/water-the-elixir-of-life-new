@@ -69,16 +69,35 @@ def create_app():
     def auto_assign():
         if current_user.role != 'manager':
             return "Unauthorized", 403
-        unassigned_tickets = Ticket.query.filter_by(assigned_worker_id=None).limit(10).all()
+        unassigned_tickets = Ticket.query.filter_by(assigned_worker_id=None).order_by(Ticket.created_at.desc()).limit(10).all()
         workers = User.query.filter_by(role='worker').all()
         if workers and unassigned_tickets:
             import itertools
             worker_cycle = itertools.cycle(workers)
             for ticket in unassigned_tickets:
                 ticket.assigned_worker_id = next(worker_cycle).id
-                ticket.status = 'IN_PROGRESS'
+                ticket.status = 'assigned'
             db.session.commit()
-        return redirect(url_for('manager_dashboard'))
+        return redirect(url_for('manager_dashboard') + '#tab-tickets')
+
+
+    @app.route('/update_ticket_status/<int:ticket_id>', methods=['POST'])
+    @login_required
+    @role_required('worker')
+    def update_ticket_status(ticket_id):
+        notes = request.form.get('notes')
+        status = request.form.get('status')
+        ticket = Ticket.query.get(ticket_id)
+        if ticket and ticket.assigned_worker_id == current_user.id:
+            ticket.status = status
+            ticket.worker_notes = notes
+            from datetime import datetime
+            if status == 'RESOLVED' or status == 'resolved':
+                ticket.resolved_at = datetime.utcnow()
+                if ticket.complaint:
+                    ticket.complaint.status = 'resolved'
+            db.session.commit()
+        return redirect(url_for('worker_dashboard'))
 
     @app.route('/worker', methods=['GET', 'POST'])
 
@@ -122,6 +141,26 @@ def create_app():
         complaints = Complaint.query.filter_by(student_id=current_user.id).order_by(Complaint.created_at.desc()).all()
         zones = Zone.query.all()
         return render_template('student.html', complaints=complaints, zones=zones)
+
+    @app.route('/auto_assign_complaint/<int:complaint_id>', methods=['POST'])
+    @login_required
+    @role_required('manager')
+    def auto_assign_complaint(complaint_id):
+        complaint = Complaint.query.get(complaint_id)
+        workers = User.query.filter_by(role='worker').all()
+        if complaint and workers:
+            import random
+            worker = random.choice(workers)
+            ticket = Ticket(
+                complaint_id=complaint.id,
+                zone_id=complaint.zone_id,
+                assigned_worker_id=worker.id,
+                status='assigned'
+            )
+            complaint.status = 'in_progress'
+            db.session.add(ticket)
+            db.session.commit()
+        return redirect(url_for('manager_dashboard') + '#tab-complaints')
 
     @app.route('/assign_ticket', methods=['POST'])
     @login_required

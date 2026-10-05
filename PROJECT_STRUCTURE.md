@@ -8,7 +8,7 @@ This document provides a detailed breakdown of every folder and critical file in
 The root directory holds the main orchestration scripts and the Flask web application.
 
 - **`run_all.py`**: The master execution script. It uses `subprocess` to spin up the Flask dashboard, the AI Central Server, the Sensor Clients, and (optionally) the Spring Boot & Angular servers all in a single terminal window.
-- **`app.py`**: The Flask web server. Handles routing, Jinja2 template rendering, dashboard logic, and dynamically switches between SQLite and MySQL based on environment variables.
+- **`app.py`**: The Flask web server. Handles routing, Jinja2 template rendering, dashboard logic, and dynamically switches between SQLite and MySQL based on environment variables. *Contains advanced assignment routing (`/auto_assign`, `/auto_assign_complaint`) for intelligent task distribution.*
 - **`auth.py`**: Contains security decorators (e.g., `@login_required`, `@role_required`) to protect Flask routes.
 - **`models.py`**: SQLAlchemy database schemas (`Zone`, `Reading`, `Alert`, `Ticket`, `Complaint`, `User`).
 - **`severity_map.py`**: A shared utility that translates string-based physics severities (e.g., "Suspected Leak") into standard Database Enums (e.g., "HIGH").
@@ -46,9 +46,9 @@ The brain of the anomaly detection system.
 ## 📁 `templates/` (Flask UI)
 The HTML views for the Python web dashboard, utilizing Tailwind CSS for styling and Jinja2 for dynamic rendering.
 - **`base.html`**: The master layout containing the navigation bar and CSS imports.
-- **`manager.html`**: The 3-column tabbed dashboard for Managers (Alerts, Tickets, Complaints, Auto-Assign).
-- **`worker.html`**: A Kanban-style grid for maintenance workers to update ticket statuses.
-- **`student.html`**: A split-view page for students to submit complaints and track their resolution.
+- **`manager.html`**: The 3-column tabbed dashboard for Managers. Includes advanced UI logic for auto-assigning system alerts and student complaints directly to workers.
+- **`worker.html`**: A Kanban-style grid for maintenance workers to update ticket statuses and add resolution notes.
+- **`student.html`**: A split-view page for students to submit complaints and track their lifecycle across three resolution phases.
 - **`login.html`**: The authentication page.
 
 ---
@@ -75,7 +75,6 @@ The independent Single Page Application (SPA) built with Angular 18.
 - **`src/app/`**:
   - **`models/models.ts`**: TypeScript interfaces that perfectly mirror the Java DTOs.
   - **`services/`**: Contains `api.service.ts` (HttpClient requests to Spring Boot) and `auth.interceptor.ts` (automatically injects the Basic Auth headers into outgoing requests).
-  - *(Components like `dashboard`, `alerts`, `complaints` are designed to be generated here).*
 - **`angular.json` & `package.json`**: Build configuration and NPM dependency lists.
 
 ---

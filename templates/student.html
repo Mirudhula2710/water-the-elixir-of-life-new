@@ -65,6 +65,15 @@
                 <p class="text-sm text-gray-700 bg-gray-50/80 p-3 rounded-lg border border-gray-100 mt-2">
                     "{{ c.description }}"
                 </p>
+                <div class="mt-3 p-3 rounded bg-purple-50 text-purple-800 text-sm font-semibold border border-purple-100">
+                    {% if c.status == 'open' or c.status == 'pending' %}
+                        Your complaint has been noted and a worker is being assigned.
+                    {% elif c.status == 'in_progress' or c.status == 'assigned' %}
+                        A worker has been assigned to address your complaint.
+                    {% elif c.status == 'resolved' or c.status == 'RESOLVED' %}
+                        The work has been completed according to your raised complaint. Thank you for raising a complaint regarding this.
+                    {% endif %}
+                </div>
             </div>
             
             <!-- Right Status -->
